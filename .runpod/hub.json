@@ -1,0 +1,45 @@
+{
+  "name": "Easy Embedding Worker",
+  "author": "valendra",
+  "description": "OpenAI-compatible embeddings with optional image_url and bulk mode, powered by HuggingFace models on RunPod serverless.",
+  "repository": "https://github.com/valendra/easy-embedding-worker",
+  "tags": ["embeddings", "clip", "text", "openai-compatible", "python", "torch", "serverless"],
+  "entrypoint": "handler.py",
+  "env": [
+    {"name": "MODEL_ID", "type": "string", "description": "Default HF model id to load at startup", "required": false, "default": "openai/clip-vit-large-patch14"},
+    {"name": "HF_TOKEN", "type": "string", "description": "HuggingFace token for private models", "required": false, "secret": true},
+    {"name": "TRANSFORMERS_CACHE", "type": "string", "description": "Cache directory for models", "required": false},
+    {"name": "CUDA_VISIBLE_DEVICES", "type": "string", "description": "Restrict visible GPUs", "required": false}
+  ],
+  "resources": {
+    "gpu": {
+      "name": "NVIDIA GPU",
+      "count": 1,
+      "memory": {
+        "type": "gte",
+        "value": 8
+      }
+    },
+    "ports": [],
+    "volume": {
+      "mountPath": "/cache",
+      "readOnly": false,
+      "sizeGb": 20
+    }
+  },
+  "presets": [
+    {
+      "name": "Default CLIP",
+      "env": {"MODEL_ID": "openai/clip-vit-large-patch14"}
+    },
+    {
+      "name": "BGE Small Text",
+      "env": {"MODEL_ID": "BAAI/bge-small-en-v1.5"}
+    },
+    {
+      "name": "Multilingual E5",
+      "env": {"MODEL_ID": "intfloat/multilingual-e5-small"}
+    }
+  ],
+  "tests": "tests.json"
+}

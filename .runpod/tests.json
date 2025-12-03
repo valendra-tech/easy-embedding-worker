@@ -1,0 +1,52 @@
+{
+  "tests": [
+    {
+      "name": "text_single",
+      "description": "Single text embedding",
+      "input": {
+        "input": {
+          "model": "BAAI/bge-small-en-v1.5",
+          "input": "hello from runpod"
+        }
+      },
+      "validator": {
+        "type": "json_path_exists",
+        "path": "$.data[0].embedding"
+      }
+    },
+    {
+      "name": "clip_image",
+      "description": "CLIP text+image fusion",
+      "input": {
+        "input": {
+          "model": "openai/clip-vit-large-patch14",
+          "input": "a cat",
+          "image_url": "https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg"
+        }
+      },
+      "validator": {
+        "type": "json_path_exists",
+        "path": "$.data[0].embedding"
+      }
+    },
+    {
+      "name": "bulk_three",
+      "description": "Bulk request with three items",
+      "input": {
+        "input": {
+          "model": "BAAI/bge-small-en-v1.5",
+          "bulk": true,
+          "items": [
+            {"input": "first"},
+            {"input": "second"},
+            {"input": "third"}
+          ]
+        }
+      },
+      "validator": {
+        "type": "json_path_exists",
+        "path": "$.data[2].embedding"
+      }
+    }
+  ]
+}
