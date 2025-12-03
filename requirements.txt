@@ -1,4 +1,4 @@
-transformers>=4.45.0
+transformers[torch]>=4.45.0
 pillow>=10.3.0
 requests>=2.32.3
 runpod>=1.4.0

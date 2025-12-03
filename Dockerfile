@@ -1,4 +1,4 @@
-FROM nvidia/cuda:12.1.1-cudnn8-runtime-ubuntu22.04
+FROM nvidia/cuda:13.0.2-cudnn-runtime-ubuntu24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
@@ -8,10 +8,8 @@ RUN apt-get update && \
 WORKDIR /app
 
 # Install CUDA-enabled PyTorch first so the correct wheels are pulled.
-RUN pip3 install --no-cache-dir --index-url https://download.pytorch.org/whl/cu121 torch==2.4.1 torchvision==0.19.1
-
 COPY requirements.txt ./
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt --break-system-packages
 
 COPY . .
 
