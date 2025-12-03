@@ -16,4 +16,6 @@ COPY . .
 ENV MODEL_ID="openai/clip-vit-large-patch14"
 ENV PYTHONUNBUFFERED=1
 
-CMD ["python3", "-m", "runpod"]
+# Start the RunPod serverless handler directly (the `runpod` package does not
+# expose a __main__ entrypoint).
+CMD ["python3", "-u", "handler.py"]
