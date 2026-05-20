@@ -43,6 +43,32 @@ See `.runpod/hub.json` for more details and presets.
 
 The worker exposes endpoints compatible with OpenAI's embedding API. You can send requests with text or image URLs and receive embeddings in response.
 
+### OpenAI-compatible route
+
+If your RunPod endpoint is fronted by the OpenAI-style path (`/openai/v1/embeddings`), the worker will pick up the injected `openai_route` payload automatically. Example:
+
+```bash
+curl -X POST "https://api.runpod.ai/v2/$ENDPOINT_ID/openai/v1/embeddings" \
+  -H "Authorization: Bearer $RUNPOD_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"BAAI/bge-small-en-v1.5","input":"hola mundo"}'
+```
+
+Under the hood RunPod forwards that request to the worker as:
+```json
+{
+  "input": {
+    "openai_route": "/v1/embeddings",
+    "openai_input": {
+      "model": "BAAI/bge-small-en-v1.5",
+      "input": "hola mundo"
+    }
+  }
+}
+```
+
+The response mirrors OpenAI's schema (`object: "list"`, `data[0].embedding`, `model`, `usage`).
+
 ## Presets
 - Default CLIP: `openai/clip-vit-large-patch14`
 - BGE Small Text: `BAAI/bge-small-en-v1.5`
